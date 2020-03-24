@@ -1,0 +1,47 @@
+﻿@model SurveyModel
+@{
+    ViewData["Title"] = "Index";
+    IList<Park> parks = (IList<Park>)ViewData["parks"];
+    List<SelectListItem> park = new List<SelectListItem>();
+    foreach (var p in parks)
+    {
+        park.Add(new SelectListItem() { Text = p.Name, Value = p.ParkCode });
+    }
+}
+<h1>National Park Survey</h1>
+<p>Thank you for visiting National Park Geek! Please take our survey for a chance to win a Annual Pass to your National Parks! </p>
+
+<form asp-controller="Survey" asp-action="Survey" method="post">
+
+    <div class="form-group row">
+        <div class="col-xs-10">
+            <label asp-for="ParkCode"></label>
+            <select asp-for="ParkCode" asp-items="park" class="form-control"></select>
+            <span asp-validation-for="ParkCode"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-xs-10">
+            <label asp-for="EmailAddress"></label>
+            <input type="text" asp-for="EmailAddress" placeholder=" enter email address" class="form-control" />
+            <span asp-validation-for="EmailAddress"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-xs-10">
+            <label asp-for="State"></label>
+            <select asp-for="State" asp-items="SurveyModel.states" class="form-control"></select>
+            <span asp-validation-for="State"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-xs-10">
+            <label asp-for="ActivityLevel"></label>
+            <select asp-for="ActivityLevel" asp-items="SurveyModel.activityLevels" class="form-control"></select>
+            <span asp-validation-for="ActivityLevel"></span>
+        </div>
+    </div>
+    <input type="submit" value="Submit" />
+
+</form>
+

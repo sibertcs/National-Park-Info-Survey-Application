@@ -1,0 +1,153 @@
+﻿@model DetailViewModel
+@{
+    ViewData["Title"] = "Detail";
+    bool isFarenheit = Convert.ToBoolean(ViewData["isF"]);
+}
+
+<h3>@Model.Park.Name</h3>
+<p><strong>Location:</strong> @Model.Park.Location</p>
+<img class="img-responsive detailsimage" src="~/images/ParkPictures/@(Model.Park.ParkCode).jpg" />
+
+<table class="table table-hover table-bordered">
+    <tr>
+        <td class="title">Year Founded:</td>
+        <td> @Model.Park.YearFounded</td>
+    </tr>
+    <tr>
+        <td class="title">Elevation:</td>
+        <td>@String.Format("{0:n0}", Model.Park.Elevation) ft.</td>
+
+
+    </tr>
+    <tr>
+        <td class="title">Annual Vistor Count:</td>
+        <td>@String.Format("{0:n0}", Model.Park.AnnualVisitorCount)</td>
+    </tr>
+    <tr>
+        <td class="title">Trail Miles:</td>
+        <td>@String.Format("{0:n0}", Model.Park.TrailMiles) miles</td>
+    </tr>
+    <tr>
+        <td class="title">Acreage:</td>
+        <td>@String.Format("{0:n0}", Model.Park.Acreage)</td>
+    </tr>
+    <tr>
+        <td class="title">Number Of Campsites:</td>
+        <td>@Model.Park.NumberOfCampsites</td>
+    </tr>
+    <tr>
+        <td class="title">Climate:</td>
+        <td>@Model.Park.Climate</td>
+    </tr>
+    <tr>
+        <td class="title">Entry Fee:</td>
+        <td>  @Model.Park.Fee.ToString("C")</td>
+    </tr>
+    <tr>
+        <td class="title">Number Of Animal Species:</td>
+        <td> @Model.Park.NumberOfAnimalSpecies</td>
+    </tr>
+</table>
+<p>@Model.Park.Description</p>
+<p>
+    <blockquote>
+        @Model.Park.InspirationalQuote
+        <footer> @Model.Park.QuoteSource</footer>
+    </blockquote>
+</p>
+
+<div class="container-fluid">
+    <div class="row">
+        <h2>Today's</h2>
+        <div class="col-sm-3">
+            <img class="img-responsive" src="~/images/WeatherPictures/@(Model.Weather[0].Forecast.Replace(" ","")).png" />
+            <div>
+                <strong>High</strong>
+                @Model.Weather[0].DisplayHigh
+                @if (isFarenheit)
+                {
+                    <span>&#8457</span>
+                }
+                else
+                {
+                    <span>&#8451</span>
+                }
+            </div>
+            <div>
+                <strong>Low</strong>
+                @Model.Weather[0].DisplayLow
+                @if (isFarenheit)
+                {
+                    <span>&#8457</span>
+                }
+                else
+                {
+                    <span>&#8451</span>
+                }
+            </div>
+            <div>
+
+                <div>Condition: @Model.Weather[0].Forecast</div>
+                <div>@Model.Weather[0].ForecastMessage</div>
+                <div>@Model.Weather[0].TemperatureMessage</div>
+            </div>
+        </div>
+        @for (int i = 1; i < Model.Weather.Count; i++)
+        {
+            <div class="col-sm-2">
+                <div>
+                    @DateTime.Today.AddDays(Model.Weather[i].ForecastDay-1).DayOfWeek
+                </div>
+                <img class="img-responsive" src="~/images/WeatherPictures/@(Model.Weather[i].Forecast.Replace(" ","")).png" />
+                <div>
+                    <strong>High</strong>
+                    @Model.Weather[i].DisplayHigh
+                    @if (isFarenheit)
+                    {
+                        <span>&#8457</span>
+                    }
+                    else
+                    {
+                        <span>&#8451</span>
+                    }
+                </div>
+                <div>
+                    <strong>Low</strong>
+                    @Model.Weather[i].DisplayLow
+                    @if (isFarenheit)
+                    {
+                        <span>&#8457</span>
+                    }
+                    else
+                    {
+                        <span>&#8451</span>
+                    }
+                </div>
+                <div>
+                    <div>Condition: @Model.Weather[i].Forecast</div>
+                    <div>@Model.Weather[i].ForecastMessage</div>
+                    <div>@Model.Weather[i].TemperatureMessage</div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<form asp-controller="Home" asp-action="ChangeTempType" method="Post">
+    <div>
+        @if (isFarenheit)
+        {   
+                <input type="hidden" name="parkCode" value="@Model.Park.ParkCode" />
+                 <input type="submit" value="Switch to Celsius" />
+        }
+        else
+        {
+            <input type="hidden" name="parkCode" value="@Model.Park.ParkCode" />
+            <input type="submit" value="Switch to Farenheit" />
+            
+        }
+
+    </div>
+</form>
+
+
+
